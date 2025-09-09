@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Silex",
+  "version": "0.0.1",
+  "description": "A local-first note-taking app using the File System Access API.",
+  "permissions": ["tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_icon": "icon.png",
+    "default_title": "Silex"
+  },
+  "icons": {
+    "128": "icon.png"
+  }
+}

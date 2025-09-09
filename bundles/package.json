@@ -1,0 +1,24 @@
+{
+  "name": "codemirror-bundler",
+  "version": "1.0.0",
+  "description": "A one-off bundler to create a browser-compatible CodeMirror file.",
+  "private": true,
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup": "^4.9.6"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "^6.12.0",
+    "@codemirror/commands": "^6.3.3",
+    "@codemirror/lang-markdown": "^6.2.4",
+    "@lezer/markdown": "^1.1.0",
+    "@codemirror/language": "^6.10.1",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@codemirror/view": "^6.23.1",
+    "minisearch": "^6.3.0"
+  }
+}
