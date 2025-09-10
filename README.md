@@ -15,7 +15,7 @@ to add any more features.
 This project is separated into two distinct parts:
 
 1.  `bundler`: A folder where we can bundle codemirror and whatever else we need in a `codemirror-bundle.js` file.
-2.  `the rest`: The actual Chrome Extension, written in pure vanilla JavaScript, with no build tools.
+2.  `the rest`: The actual ~~Chrome~~ VS Code Extension, written in pure vanilla JavaScript, with no build tools (but needs packaging).
 
 This leaves the extension dependency-free aside from the (hopefully fixed) bundle.
 
