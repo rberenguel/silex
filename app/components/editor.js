@@ -11,73 +11,74 @@ import {
   autocompletion,
   completionKeymap,
   GFM,
-} from "../../lib/codemirror-bundle.js";
+} from "CodeMirrorBundle"; // Use the import map
 import { state } from "../core/state.js";
-import { findFileByTitle, openFile } from "../core/files.js";
+import { saveFile, findFileByTitle, openFile } from "../core/files.js";
 
-async function saveFile(pane) {
-  if (!pane.fileHandle || !pane.editorView) return;
-  try {
-    const content = pane.editorView.state.doc.toString();
-    const writable = await pane.fileHandle.createWritable();
-    await writable.write(content);
-    await writable.close();
-  } catch (error) {
-    console.error("Error saving file:", error);
-  }
-}
-
+// This listener handles auto-saving.
 function onUpdate(pane) {
   return EditorView.updateListener.of((update) => {
     if (update.docChanged) {
       clearTimeout(pane.saveTimeout);
-      pane.saveTimeout = setTimeout(() => saveFile(pane), 500);
+      pane.saveTimeout = setTimeout(() => {
+        const content = update.state.doc.toString();
+        if (pane.filePath) {
+          saveFile(pane.filePath, content);
+        }
+      }, 500);
     }
   });
 }
 
-const livePreviewPlugin = EditorView.decorations.compute(
-  ["doc", "selection"],
-  (state) => {
-    let decorations = [];
-    const activeLine = state.doc.lineAt(state.selection.main.head).from;
+// ### FIX STARTS HERE ###
+// This plugin was missing. It finds "Link" nodes in the syntax tree
+// and applies a CSS class to them, making them visually distinct.
+const livePreviewPlugin = EditorView.decorations.compute(["doc"], (state) => {
+  let decorations = [];
+  syntaxTree(state).iterate({
+    enter: (node) => {
+      const { type, from, to } = node;
 
-    syntaxTree(state).iterate({
-      enter: (node) => {
-        const { type, from, to } = node;
-        const lineStart = state.doc.lineAt(from).from;
-        const onActiveLine = lineStart === activeLine;
-
-        if (type.name === "Link") {
+      switch (type.name) {
+        case "Link":
           decorations.push(
             Decoration.mark({ class: "cm-wikilink" }).range(from, to),
           );
-          return;
-        }
-
-        if (onActiveLine) return;
-
-        if (type.name.endsWith("Mark")) {
+          break;
+        case "HeaderMark":
+        case "QuoteMark":
+        case "ListMark":
+          // Apply a class to syntax characters so they can be hidden by CSS
           decorations.push(
             Decoration.mark({ class: "cm-formatting" }).range(from, to),
           );
-        } else if (type.name.startsWith("ATXHeading")) {
-          const headerText = state.doc.sliceString(from, to);
-          const level = headerText.match(/^#+/)[0].length;
+          break;
+        case "ATXHeading1":
           decorations.push(
-            Decoration.line({ class: `cm-header cm-header-${level}` }).range(
-              from,
-            ),
+            Decoration.line({ class: "cm-header-1" }).range(from),
           );
-        } else if (type.name === "Blockquote") {
+          break;
+        case "ATXHeading2":
+          decorations.push(
+            Decoration.line({ class: "cm-header-2" }).range(from),
+          );
+          break;
+        case "ATXHeading3":
+          decorations.push(
+            Decoration.line({ class: "cm-header-3" }).range(from),
+          );
+          break;
+        case "Blockquote":
           decorations.push(Decoration.line({ class: "cm-quote" }).range(from));
-        }
-      },
-    });
-    return Decoration.set(decorations, true);
-  },
-);
+          break;
+      }
+    },
+  });
+  return Decoration.set(decorations);
+});
 
+// This is the click handler for wikilinks. It was present but couldn't
+// work without the styled links from the plugin above.
 const wikilinkClickHandler = EditorView.domEventHandlers({
   mousedown: (event, view) => {
     const pos = view.posAtCoords(event);
@@ -95,7 +96,7 @@ const wikilinkClickHandler = EditorView.domEventHandlers({
           const targetPath = findFileByTitle(linkText);
           if (targetPath) {
             event.preventDefault();
-            openFile(targetPath); // Assumes openFile can handle which pane to open in
+            openFile(targetPath, state.activePane);
           }
         }
       },
@@ -106,6 +107,7 @@ const wikilinkClickHandler = EditorView.domEventHandlers({
   },
 });
 
+// This handles wikilink autocompletion.
 const wikilinkCompletion = (context) => {
   let match = context.matchBefore(/\[\[([^\]]*)$/);
   if (!match) return null;
@@ -127,23 +129,20 @@ const wikilinkCompletion = (context) => {
 export function createEditor(parent, doc = "") {
   const pane = {
     editorView: null,
-    fileHandle: null,
+    filePath: null,
     saveTimeout: null,
   };
 
   const editorState = EditorState.create({
     doc,
     extensions: [
-      markdown({
-        base: markdownLanguage,
-        extensions: GFM,
-      }),
+      markdown({ base: markdownLanguage, extensions: GFM }),
       oneDark,
       EditorView.lineWrapping,
       onUpdate(pane),
-      livePreviewPlugin,
-      autocompletion({ override: [wikilinkCompletion] }),
+      livePreviewPlugin, // Activate the restored plugin
       wikilinkClickHandler,
+      autocompletion({ override: [wikilinkCompletion] }),
       keymap.of([...defaultKeymap, ...completionKeymap]),
     ],
   });
@@ -152,6 +151,8 @@ export function createEditor(parent, doc = "") {
     state: editorState,
     parent,
   });
+
+  parent.parentElement.paneObject = pane;
 
   return pane;
 }

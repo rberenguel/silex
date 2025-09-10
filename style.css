@@ -245,7 +245,7 @@ body {
   display: inline-block;
   overflow: hidden;
   vertical-align: bottom;
-  width: 0;
+  /*width: 0;*/
 }
 
 /* But reveal them on the line that currently has the cursor */

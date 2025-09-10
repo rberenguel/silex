@@ -1,0 +1,62 @@
+{
+  "name": "silex-vscode",
+  "displayName": "Silex for VSCode",
+  "description": "An Obsidian-like vault reader for VS Code.",
+  "version": "0.0.1",
+  "publisher": "rberenguel",
+  "repository": "https://github.com/rberenguel/silex",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "license": "MIT",
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:silex.openVault",
+    "onView:silexSidebarView"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "silex.openVault",
+        "title": "Silex: Open Vault"
+      },
+      {
+        "command": "silex.splitVertical",
+        "title": "Silex: Split Vertically"
+      },
+      {
+        "command": "silex.splitHorizontal",
+        "title": "Silex: Split Horizontally"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "silex.splitVertical",
+        "key": "ctrl+p |",
+        "when": "webviewPanel.active && webviewPanel.viewType == 'silex'"
+      },
+      {
+        "command": "silex.splitHorizontal",
+        "key": "ctrl+p -",
+        "when": "webviewPanel.active && webviewPanel.viewType == 'silex'"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "silex-sidebar",
+          "title": "Silex",
+          "icon": "icon.png"
+        }
+      ]
+    },
+    "views": {
+      "silex-sidebar": [
+        {
+          "id": "silexSidebarView",
+          "name": "Vault Explorer"
+        }
+      ]
+    }
+  }
+}

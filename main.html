@@ -4,19 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Silex</title>
-    <link rel="stylesheet" href="lib/pico.min.css" />
-    <link rel="stylesheet" href="fonts/victormono.css" />
-    <link rel="stylesheet" href="lib/metap/metap.css" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="SILEX_PICO_CSS" />
+    <link rel="stylesheet" href="SILEX_VICTORMONO_CSS" />
+    <link rel="stylesheet" href="SILEX_METAP_CSS" />
+    <link rel="stylesheet" href="SILEX_STYLE_CSS" />
   </head>
   <body>
     <div id="app-container">
       <aside id="sidebar">
         <header id="sidebar-header">
           <button id="sidebar-toggle-btn">☰</button>
-          <button id="open-folder-btn" class="secondary outline">
-            Open Folder
-          </button>
         </header>
         <nav>
           <span id="current-file-title"></span>
@@ -28,7 +25,16 @@
       </main>
     </div>
 
-    <script src="lib/metap/metap.js"></script>
-    <script type="module" src="app/main.js"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "CodeMirrorBundle": "SILEX_CODEMIRROR_BUNDLE_JS"
+        }
+      }
+    </script>
+
+    <script src="SILEX_METAP_JS"></script>
+    <script type="module" src="SILEX_VSCODE_API_JS"></script>
+    <script type="module" src="SILEX_MAIN_JS"></script>
   </body>
 </html>

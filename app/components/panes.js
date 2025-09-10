@@ -33,11 +33,13 @@ function createPaneElement() {
 
   // Event listener for renaming
   paneTitle.addEventListener("click", () => {
-    if (!pane.fileHandle) return; // Can't rename a file that doesn't exist
+    // This now correctly checks for filePath
+    if (!pane.filePath) return;
+
     const input = document.createElement("input");
     input.type = "text";
     input.className = "pane-title-input";
-    input.value = pane.fileHandle.name;
+    input.value = pane.filePath.split("/").pop(); // Show only the filename
 
     paneHeader.replaceChild(input, paneTitle);
     input.focus();
@@ -45,15 +47,15 @@ function createPaneElement() {
 
     const finishEditing = async () => {
       const newName = input.value.trim();
-      // Check if name is valid and changed
-      if (newName && newName !== pane.fileHandle.name) {
-        const newHandle = await renameFile(pane.fileHandle, newName);
-        if (newHandle) {
-          pane.fileHandle = newHandle;
-          paneTitle.textContent = newName;
+      const oldName = pane.filePath.split("/").pop();
+
+      if (newName && newName !== oldName) {
+        const newPath = await renameFile(pane.filePath, newName);
+        if (newPath) {
+          pane.filePath = newPath; // Update the path on the pane
+          paneTitle.textContent = newName.replace(".md", "");
         }
       }
-      // Always revert back to the span
       paneHeader.replaceChild(paneTitle, input);
     };
 
