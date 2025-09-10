@@ -2,7 +2,7 @@
 
 > Silex is the Catalan work for _flint_. A rock, sharp, used to make tools.
 
-This is a Chrome extension that can be pointed at an Obsidian vault and more or less read the files and edit them.
+This is a ~~Chrome extension~~ VS Code extension that can be pointed at an Obsidian vault and more or less read the files and edit them.
 Also offers search (through Minisearch, title only for now) and a couple commands.
 
 ---
@@ -36,11 +36,6 @@ That's it. You are done with the `codemirror-bundler` folder. You can now ignore
 
 ### Loading the Extension
 
-1.  Open Chrome and navigate to `chrome://extensions`.
-2.  Enable "Developer mode".
-3.  Click "Load unpacked" and select the **`Silex`** folder.
-4.  Ready. Point it to a folder once you open it.
-
-## Install
-
-Git clone this repository somewhere and follow _Loading the Extension_ in the previous section.
+1.  Download the release.
+2.  Open VS Code and invoke the _Command Palette_.
+3.  Choose _Extensions: Install from vsix_.
