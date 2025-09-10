@@ -1,110 +1,170 @@
-/* App Layout */
-html,
+/* General Setup & Theme Variables */
+:root {
+  --background-color: #282c34;
+  --text-color: #abb2bf;
+  --border-color: #424752;
+  --accent-bg: #3a3f4b;
+  --font-family: "VictorMono", monospace;
+}
+
 body {
-  overflow: hidden;
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  overflow: hidden; /* Prevent scrollbars on the body */
 }
 
-#metap-modal {
-  top: 10vh;
-}
-
+/* Main App Layout */
 #app-container {
   display: flex;
   height: 100vh;
-  width: 100vw;
-}
-
-#sidebar {
-  width: 280px;
-  min-width: 280px; /* Prevent shrinking */
-  height: 100%;
-  border-right: 1px solid var(--card-border);
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  transition: transform 0.3s ease; /* Use transform for transitions */
-}
-
-/* Sidebar hidden state */
-#app-container.sidebar-hidden #sidebar {
-  transform: translateX(-100%);
-}
-
-#sidebar-header {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--card-border);
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
 }
 
 #sidebar-toggle-btn {
-  width: auto;
-  padding: 0 0.5rem;
+  font-size: 75%;
+  padding: 0.5em;
 }
 
 #open-folder-btn {
-  font-size: 70%;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  font-size: 75%;
+  padding: 0.5em;
 }
 
-#sidebar nav {
-  overflow-y: auto;
-  flex-grow: 1;
+#sidebar {
+  width: 250px;
+  background-color: #21252b;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  transition:
+    width 0.2s ease-in-out,
+    min-width 0.2s ease-in-out; /* <-- Add this line */
+}
+
+#app-container.sidebar-hidden #sidebar {
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+#sidebar-header {
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 #notes-list {
-  margin: 0;
+  list-style: none;
   padding: 0;
+  margin: 0;
+  overflow-y: auto;
 }
+
 #notes-list li {
-  padding: 0.2rem 0.3rem;
+  padding: 2px 3px;
   cursor: pointer;
-  border-bottom: 1px solid var(--card-border);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
-#notes-list li:hover {
-  background-color: var(--card-background-color);
-}
+
 #notes-list li.active {
-  background-color: var(--primary);
-  color: var(--primary-inverse);
+  background-color: var(--accent-bg);
 }
 
-#main-header {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--card-border);
-  flex-shrink: 0; /* Prevent header from shrinking */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Adjust layout to accommodate header */
 #main-content {
   display: flex;
+  flex-grow: 1;
+  width: 100%;
+}
+
+/* Pane and Splitting Styles */
+#panes-container {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.pane-container {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.pane-container.horizontal {
+  flex-direction: row;
+}
+
+.pane-container.vertical {
   flex-direction: column;
 }
 
-#editor-container {
-  flex-grow: 1;
-  overflow: hidden; /* Prevent editor from overflowing */
+.pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
-#editor-container,
+.pane:last-child {
+  border-right: none;
+}
+
+.pane-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.pane-title {
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.pane-title-input {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--accent-bg);
+  width: 100%;
+}
+
+.close-pane-btn {
+  border: none;
+  background: none;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.editor-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;
+  position: relative; /* Needed for CodeMirror to size correctly */
+}
+
 .cm-editor {
   height: 100%;
-  width: 90em;
+  width: 100%;
+  /* Add these two lines */
+  font-family: "VictorMono", monospace;
+  font-size: 16px; /* Adjust this value to your liking */
 }
 
-#editor-container .cm-scroller {
-  padding-top: 2em;
-  padding-left: 4rem;
+.cm-wikilink {
+  color: #61afef;
+  text-decoration: none;
 }
 
 /* --- Sidebar File Tree --- */

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Silex</title>
     <link rel="stylesheet" href="lib/pico.min.css" />
-
+    <link rel="stylesheet" href="fonts/victormono.css" />
     <link rel="stylesheet" href="lib/metap/metap.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -19,20 +19,16 @@
           </button>
         </header>
         <nav>
+          <span id="current-file-title"></span>
           <ul id="notes-list"></ul>
         </nav>
       </aside>
       <main id="main-content">
-        <header id="main-header">
-          <span id="current-file-title"></span>
-        </header>
-        <div id="editor-container"></div>
+        <div id="panes-container"></div>
       </main>
     </div>
 
-    <script src="lib/codemirror-bundle.js"></script>
     <script src="lib/metap/metap.js"></script>
-    <!-- Your palette script -->
-    <script src="app.js"></script>
+    <script type="module" src="app/main.js"></script>
   </body>
 </html>
