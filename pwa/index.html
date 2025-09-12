@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Silex PWA</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../lib/pico.min.css" />
+    <link rel="stylesheet" href="../fonts/victormono.css" />
+    <link rel="stylesheet" href="../lib/metap/metap.css" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <script type="importmap">
+      {
+        "imports": {
+          "CodeMirrorBundle": "../lib/codemirror-bundle.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="app-container">
+      <aside id="sidebar">
+        <header id="sidebar-header">
+          <button id="open-vault-btn">Open Vault</button>
+          <button id="sidebar-toggle-btn">☰</button>
+        </header>
+        <nav>
+          <ul id="notes-list"></ul>
+        </nav>
+      </aside>
+      <main id="main-content">
+        <div id="panes-container"></div>
+      </main>
+    </div>
+    <script src="../lib/metap/metap.js"></script>
+    <script src="pwa-bridge.js"></script>
+    <script type="module" src="../app/main.js"></script>
+  </body>
+</html>
