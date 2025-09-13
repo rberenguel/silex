@@ -1,6 +1,6 @@
 {
-  "name": "Silex PWA",
-  "short_name": "Silex",
+  "name": "Olivine",
+  "short_name": "Olivine",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",

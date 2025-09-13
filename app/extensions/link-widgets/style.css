@@ -1,0 +1,6 @@
+.cm-link-widget {
+  color: var(--color-d-green-20);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  cursor: pointer;
+}

@@ -4,7 +4,7 @@ import { renameFile } from "../core/files.js";
 
 const panesContainer = document.getElementById("panes-container");
 
-function createPaneElement() {
+function createPaneElement(isEditor = true) {
   const paneElement = document.createElement("div");
   paneElement.className = "pane";
 
@@ -27,7 +27,16 @@ function createPaneElement() {
   paneElement.appendChild(paneHeader);
   paneElement.appendChild(editorContainer);
 
-  const pane = createEditor(editorContainer, "");
+  let pane;
+  if (isEditor) {
+    pane = createEditor(editorContainer, "");
+  } else {
+    pane = {
+      element: paneElement,
+      titleElement: paneTitle,
+      contentContainer: editorContainer,
+    };
+  }
   pane.element = paneElement;
   pane.titleElement = paneTitle;
 
@@ -78,6 +87,26 @@ function createPaneElement() {
   return pane;
 }
 
+export function createCustomPane(viewType) {
+  const viewConfig = window.app.viewTypes.get(viewType);
+  if (!viewConfig) {
+    console.error(`Unknown view type: ${viewType}`);
+    return;
+  }
+
+  // Create a pane shell without an editor
+  const pane = createPaneElement(false);
+  pane.titleElement.textContent = viewConfig.title || "Custom View";
+
+  // Render the extension's UI into the pane's content area
+  viewConfig.render(pane.contentContainer);
+
+  // Add the new pane to the DOM (this logic can be shared with splitActivePane)
+  const panesContainer = document.getElementById("panes-container");
+  panesContainer.appendChild(pane.element);
+  setActivePane(pane);
+}
+
 export function createInitialPane() {
   const pane = createPaneElement();
   panesContainer.appendChild(pane.element);
@@ -108,6 +137,8 @@ function closePane(pane) {
   }
 }
 
+// app/components/panes.js
+
 export function splitActivePane(direction) {
   if (!state.activePane) {
     createInitialPane();
@@ -118,13 +149,49 @@ export function splitActivePane(direction) {
   const parent = existingPane.element.parentElement;
 
   const container = document.createElement("div");
-  container.className = `pane-container ${direction}`;
+  container.className = `pane-container`; // No longer need vertical/horizontal class
 
   parent.replaceChild(container, existingPane.element);
 
-  const newPane = createPaneElement();
-  container.appendChild(existingPane.element);
-  container.appendChild(newPane.element);
+  const newPane = createPaneElement(true);
+
+  // The library needs a gutter element between the panes
+  const gutter = document.createElement("div");
+
+  // The setup depends on the split direction
+  if (direction === "vertical") {
+    // Side-by-side columns
+    container.style.gridTemplateColumns = "1fr 8px 1fr"; // Pane | Gutter | Pane
+    gutter.className = "gutter gutter-col";
+    container.appendChild(existingPane.element);
+    container.appendChild(gutter);
+    container.appendChild(newPane.element);
+
+    Split({
+      columnGutters: [
+        {
+          track: 1, // The gutter is at track 1 (0-indexed)
+          element: gutter,
+        },
+      ],
+    });
+  } else {
+    // Stacked rows
+    container.style.gridTemplateRows = "1fr 8px 1fr"; // Pane / Gutter / Pane
+    gutter.className = "gutter gutter-row";
+    container.appendChild(existingPane.element);
+    container.appendChild(gutter);
+    container.appendChild(newPane.element);
+
+    Split({
+      rowGutters: [
+        {
+          track: 1,
+          element: gutter,
+        },
+      ],
+    });
+  }
 
   setActivePane(newPane);
 }

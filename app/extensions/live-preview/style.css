@@ -1,0 +1,41 @@
+/* Live Preview Styles */
+.cm-editor .cm-line.cm-header-1 {
+  font-size: 2em;
+  font-weight: bold;
+}
+.cm-editor .cm-line.cm-header-2 {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+.cm-editor .cm-line.cm-header-3 {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.cm-editor .cm-line.cm-quote {
+  font-style: italic;
+  color: #999;
+  padding-left: 1em;
+  border-left: 3px solid var(--pico-primary);
+}
+
+/* This is the key part: hide the syntax markers by default */
+.cm-editor .cm-formatting {
+  color: #555;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+/* But reveal them on the line that currently has the cursor */
+.cm-editor .cm-line.cm-active .cm-formatting {
+  width: auto;
+}
+
+.cm-em {
+  color: var(--color-d-blue-30);
+}
+
+.cm-strong {
+  color: var(--color-d-red-30);
+}

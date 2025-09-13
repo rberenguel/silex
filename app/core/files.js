@@ -1,6 +1,5 @@
 import { state } from "./state.js";
 import { loadSidebarList } from "../components/sidebar.js";
-import { updatePaletteBindings } from "./commands.js";
 import { MiniSearch } from "CodeMirrorBundle";
 import * as vscode from "./vscode-api.js";
 
@@ -53,7 +52,7 @@ export async function loadAndIndexNotes(files) {
   });
   state.fileSearchIndex.addAll(documents);
 
-  updatePaletteBindings();
+  window.app.commands.refreshPalette();
 }
 
 export async function createNewFile() {

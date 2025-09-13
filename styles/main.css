@@ -1,0 +1,110 @@
+:root {
+    /* Colors from the Obsidian primary theme: https://github.com/primary-theme/obsidian/blob/main/src/css/main.css */
+    --color-d-gray-10: hsla(32, 48%, 85%, 1);
+  --color-d-gray-20: hsla(34, 39%, 74%, 1);
+  --color-d-gray-30: hsla(34, 31%, 68%, 1);
+  --color-d-gray-40: hsla(35, 27%, 55%, 1);
+  --color-d-gray-50: hsla(34, 24%, 46%, 1);
+  --color-d-gray-60: hsla(33, 27%, 33%, 1);
+  --color-d-gray-70: hsla(31, 27%, 25%, 1);
+  --color-d-gray-80: hsla(28, 22%, 19%, 1);
+  --color-d-gray-90: hsla(33, 20%, 17%, 1);
+  --color-d-gray-100: hsla(30, 19%, 15%, 1);
+  --color-d-gray-110: hsla(30, 17%, 14%, 1);
+  --color-d-gray-120: hsla(29, 16%, 13%, 1);
+  --color-d-gray-130: hsla(24, 18%, 11%, 1);
+  --color-d-gray-140: hsla(32, 21%, 9%, 1);
+  --color-d-alpha-gray: hsla(34, 24%, 40%, 0.2);
+  /* Red */
+  --color-d-red-10: hsla(5, 94%, 73%, 1);
+  --color-d-red-20: hsla(4, 91%, 67%, 1);
+  --color-d-red-30: hsla(4, 88%, 61%, 1);
+  --color-d-red-40: hsla(2, 75%, 52%, 1);
+  --color-d-alpha-red: hsla(350, 84%, 63%, 0.2);
+  /* Orange */
+  --color-d-orange-10: hsla(26, 85%, 58%, 1);
+  --color-d-orange-20: hsla(24, 84%, 50%, 1);
+  --color-d-orange-30: hsla(22, 82%, 47%, 1);
+  --color-d-orange-40: hsla(19, 81%, 41%, 1);
+  --color-d-alpha-orange: hsla(27, 100%, 50%, 0.2);
+  /* Yellow */
+  --color-d-yellow-10: hsla(43, 69%, 63%, 1);
+  --color-d-yellow-20: hsla(42, 79%, 51%, 1);
+  --color-d-yellow-30: hsla(40, 78%, 48%, 1);
+  --color-d-yellow-40: hsla(38, 76%, 42%, 1);
+  --color-d-alpha-yellow: hsla(44, 100%, 50%, 0.2);
+  /* Green */
+  --color-d-green-10: hsla(152, 51%, 54%, 1);
+  --color-d-green-20: hsla(154, 57%, 42%, 1);
+  --color-d-green-30: hsla(155, 78%, 29%, 1);
+  --color-d-green-40: hsla(154, 75%, 26%, 1);
+  --color-d-alpha-green: hsla(74, 69%, 44%, 0.2);
+  /* Blue */
+  --color-d-blue-10: hsla(191, 54%, 62%, 1);
+  --color-d-blue-20: hsla(194, 59%, 56%, 1);
+  --color-d-blue-30: hsla(197, 48%, 49%, 1);
+  --color-d-blue-40: hsla(201, 45%, 40%, 1);
+  --color-d-alpha-blue: hsla(186, 64%, 46%, 0.2);
+  /* Purple */
+  --color-d-purple-10: hsla(242, 52%, 69%, 1);
+  --color-d-purple-20: hsla(241, 45%, 57%, 1);
+  --color-d-purple-30: hsla(239, 45%, 51%, 1);
+  --color-d-purple-40: hsla(238, 47%, 48%, 1);
+  --color-d-alpha-purple: hsla(236, 100%, 72%, 0.2);
+  /*────────── Foundations ──────────*/
+  /* Base Colors */
+  --color-base-00: var(--color-d-gray-140);
+  --color-base-05: var(--color-d-gray-120);
+  --color-base-10: var(--color-d-gray-100);
+  --color-base-20: var(--color-d-gray-90);
+  --color-base-25: var(--color-d-gray-80);
+  --color-base-30: var(--color-d-gray-70);
+  --color-base-35: var(--color-d-gray-60);
+  --color-base-40: var(--color-d-gray-50);
+  --color-base-50: var(--color-d-gray-40);
+  --color-base-60: var(--color-d-gray-30);
+  --color-base-70: var(--color-d-gray-20);
+  --color-base-100: var(--color-d-gray-10);
+
+
+    --background-color: var(--color-d-gray-110);
+  --text-color: var(--color-d-gray-20);
+  --border-color: #424752;
+  --accent-bg: #3a3f4b;
+  --font-family: "VictorMono", monospace;
+}
+#metap-modal {
+    font-size: 0.8rem;
+}
+.metap-modal-row {
+    padding: 0.2rem 0.4rem;
+}
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  overflow: hidden;
+}
+#app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+#content-wrapper {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+}
+#main-content {
+  /*flex: 1;*/
+  display: flex;
+  min-width: 0;
+}
+#statusbar-container {
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-top: 1px solid var(--border-color);
+}

@@ -366,7 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
       title: doc.name.split("/").pop(),
       lambda: () => openFile(doc.id),
     }));
-    updatePaletteBindings();
+    //updatePaletteBindings();
   }
 
   // --- Permission & Startup --- (Unchanged)

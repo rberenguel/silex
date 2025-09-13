@@ -1,4 +1,4 @@
-// Chrome Extension bridge for the Silex app.
+// Chrome Extension bridge for the Olivine app.
 // This file will mock the VS Code API using chrome.* APIs.
 // This file is currently a placeholder.
 

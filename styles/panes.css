@@ -1,0 +1,66 @@
+/* styles/panes.css */
+
+/* The main container that holds all panes and pane groups */
+#panes-container {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+/* This is the wrapper for a PAIR of split panes */
+.pane-container {
+  display: grid;
+  flex: 1; /* It's still a flex item within its parent */
+  min-width: 0;
+  min-height: 0;
+}
+
+/* A vertical split creates columns, so the flex direction is ROW */
+.pane-container.horizontal {
+  flex-direction: row;
+}
+
+/* A horizontal split creates rows, so the flex direction is COLUMN */
+.pane-container.vertical {
+  flex-direction: column;
+}
+
+/* An individual pane */
+.pane {
+  /*flex: 1;*/
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+#panes-container > .pane {
+  flex: 1;
+}
+.pane:last-child {
+  border-right: none;
+}
+.pane-container.horizontal > .pane:last-child {
+  border-bottom: none;
+}
+
+/* CRITICAL: This rule prevents a pane's own flex settings from
+   fighting with the Split.js library's size calculations. */
+.pane-container > .pane {
+  flex-shrink: 0 !important;
+}
+
+.gutter {
+  background-color: var(--border-color);
+  z-index: 10;
+}
+.gutter:hover {
+  background-color: var(--pico-primary);
+}
+.gutter-col {
+  cursor: col-resize;
+}
+.gutter-row {
+  cursor: row-resize;
+}

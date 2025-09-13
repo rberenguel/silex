@@ -12,7 +12,7 @@ function activate(context) {
 
   // We are creating a command that will instantiate the panel.
   context.subscriptions.push(
-    vscode.commands.registerCommand("silex.openVault", () => {
+    vscode.commands.registerCommand("olivine.openVault", () => {
       if (!rootPath) {
         vscode.window.showInformationMessage(
           "Please open a folder to use Silex.",

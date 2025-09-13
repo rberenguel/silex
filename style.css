@@ -18,7 +18,9 @@ body {
 /* Main App Layout */
 #app-container {
   display: flex;
+  flex-direction: column;
   height: 100vh;
+  overflow: hidden;
 }
 
 #sidebar-toggle-btn {
@@ -31,6 +33,19 @@ body {
   padding: 0.5em;
 }
 
+#statusbar-container {
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--code-background);
+  border-top: 1px solid var(--border-color);
+}
+
+#sidebar-panel-container {
+  /* Add styling for sidebar panels if needed */
+  padding: 0.5rem;
+}
+
 #sidebar {
   width: 250px;
   background-color: #21252b;
@@ -41,7 +56,11 @@ body {
     width 0.2s ease-in-out,
     min-width 0.2s ease-in-out; /* <-- Add this line */
 }
-
+#sidebar nav {
+  flex: 1; /* Allows the nav to grow and fill available vertical space */
+  overflow-y: auto; /* Adds a scrollbar ONLY when the content overflows */
+  min-height: 0; /* Prevents flexbox overflow issues */
+}
 #app-container.sidebar-hidden #sidebar {
   width: 0;
   min-width: 0;
@@ -79,18 +98,25 @@ body {
 }
 
 #main-content {
+  flex: 1;
+  display: flex; /* Helps manage the panes-container inside */
+}
+
+#content-wrapper {
   display: flex;
-  flex-grow: 1;
-  width: 100%;
+  flex: 1; /* This is the crucial part that makes it fill the available height */
+  min-height: 0; /* Prevents flexbox overflow issues */
 }
 
 /* Pane and Splitting Styles */
+
 #panes-container {
   display: flex;
   flex: 1;
   min-width: 0;
 }
 
+/* This is the wrapper for a PAIR of split panes */
 .pane-container {
   display: flex;
   flex: 1;
@@ -98,14 +124,17 @@ body {
   min-height: 0;
 }
 
-.pane-container.horizontal {
+/* A vertical split creates columns, so the flex direction is ROW */
+.pane-container.vertical {
   flex-direction: row;
 }
 
-.pane-container.vertical {
+/* A horizontal split creates rows, so the flex direction is COLUMN */
+.pane-container.horizontal {
   flex-direction: column;
 }
 
+/* An individual pane */
 .pane {
   flex: 1;
   display: flex;
@@ -114,6 +143,34 @@ body {
   min-height: 0;
   border-right: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
+}
+
+.pane:last-child {
+  border-right: none;
+}
+.pane-container.horizontal > .pane:last-child {
+  border-bottom: none;
+}
+
+/* CRITICAL: This rule prevents a pane's own flex settings from
+   fighting with the Split.js library's size calculations. */
+.pane-container > .pane {
+  flex-shrink: 0 !important;
+}
+
+/* --- Gutter Styles (for Split.js) --- */
+.gutter {
+  background-color: var(--border-color);
+  z-index: 10;
+}
+.gutter:hover {
+  background-color: var(--pico-primary);
+}
+.gutter.gutter-horizontal {
+  cursor: row-resize;
+}
+.gutter.gutter-vertical {
+  cursor: col-resize;
 }
 
 .pane:last-child {

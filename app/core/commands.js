@@ -1,50 +1,26 @@
+// app/core/commands.js
 import { state } from "./state.js";
-import { loadAndIndexNotes, openFile, createNewFile } from "./files.js";
-import { splitActivePane } from "../components/panes.js"; // <-- Import split function
+import { loadAndIndexNotes, createNewFile } from "./files.js";
+import { splitActivePane } from "../components/panes.js";
 
+// This file now only defines the static commands
 const staticCommands = [
+  { title: "New Note", lambda: createNewFile },
+  { title: "Split horizontally", lambda: () => splitActivePane("horizontal") },
+  { title: "Split vertically", lambda: () => splitActivePane("vertical") },
   {
-    title: "New Note",
-    aliases: ["create", "new"],
-    lambda: createNewFile,
-  },
-  {
-    title: "Split Vertically",
-    aliases: ["splitv"],
-    lambda: () => splitActivePane("vertical"),
-  },
-  {
-    title: "Split Horizontally",
-    aliases: ["splith"],
-    lambda: () => splitActivePane("horizontal"),
-  },
-  {
-    title: "Toggle Sidebar",
-    aliases: ["ui", "sidebar"],
+    title: "Toggle sidebar",
     lambda: () => document.getElementById("sidebar-toggle-btn").click(),
   },
-  {
-    title: "Re-index Notes",
-    aliases: ["rescan", "refresh"],
-    lambda: () => loadAndIndexNotes(state.notesDirectoryHandle),
-  },
+  { title: "Re-index Notes", lambda: () => loadAndIndexNotes() },
 ];
 
-export function updatePaletteBindings() {
-  metaP.maxCommands = 10;
-  metaP.maxCommandTitleLength = 50;
+export function initializeCommands(app) {
+  // Register the initial static commands
+  app.commands.register("static", staticCommands);
 
-  const fileCommands = state.allFilePaths.map((path) => ({
-    title: path.replace(".md", "").split("/").pop(),
-    lambda: () => openFile(path, state.activePane),
-  }));
-
-  metaP.bind(
-    { command: staticCommands, file: fileCommands },
-    { maxCommands: 10, blur: 1 },
-  );
+  // The palette is now refreshed elsewhere, like after files are loaded
 }
 
-export function initializeCommands() {
-  updatePaletteBindings();
-}
+// The old updatePaletteBindings function is no longer needed here.
+// Its logic has been moved to app.commands.refreshPalette.

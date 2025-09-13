@@ -5,6 +5,7 @@ export const state = {
   allNoteCommands: [],
   fileSearchIndex: null,
   allFilePaths: [],
+  cmExtensions: [],
   activePane: null, // To track the active editor pane
 };
 

@@ -1,5 +1,5 @@
-import { EditorState } from "@codemirror/state";
-import { EditorView, keymap, Decoration } from "@codemirror/view";
+import { EditorState, EditorSelection } from "@codemirror/state";
+import { EditorView, keymap, Decoration, WidgetType, ViewPlugin } from "@codemirror/view";
 import { defaultKeymap } from "@codemirror/commands";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { autocompletion, completionKeymap } from "@codemirror/autocomplete";
@@ -9,8 +9,11 @@ import { syntaxTree } from "@codemirror/language";
 import { GFM } from "@lezer/markdown"; // <-- The correct import
 
 export {
+  EditorSelection,
   EditorState,
   EditorView,
+  WidgetType,
+  ViewPlugin,
   keymap,
   defaultKeymap,
   markdown,

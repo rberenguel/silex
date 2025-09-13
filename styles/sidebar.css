@@ -1,0 +1,75 @@
+/* styles/sidebar.css */
+
+#sidebar {
+  background-color: var(--background-color);
+  border-right: 1px solid var(--border-color);
+  display: grid;
+  color: var(--text-color);
+  /* ADD THIS LINE to constrain the grid rows */
+  overflow: hidden;
+}
+
+/* Hide/show transition */
+#app-container.sidebar-hidden #sidebar {
+  min-width: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+#sidebar-header {
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-color);
+  /* flex-shrink: 0; is no longer needed */
+}
+
+/* We no longer need flex-grow, as Grid handles the sizing */
+#sidebar nav, #sidebar-panel-container {
+  overflow-y: auto;
+  min-height: 0; /* Prevents content overflow issues */
+}
+
+#notes-list {
+  list-style: none;
+  padding: 0 3px; /* Add some padding */
+  margin: 0;
+  font-size: 75%;
+}
+
+#notes-list ul {
+  padding: 0;
+  padding-top: 3px;
+}
+
+#notes-list li {
+  padding: 2px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#notes-list li.active {
+  background-color: var(--accent-bg);
+}
+#sidebar-panel-container {
+  padding: 0.5rem;
+  border-top: 1px solid var(--border-color);
+}
+/* File Tree Styles */
+#notes-list ul {
+  padding-left: 1rem;
+  list-style: none;
+  margin: 0;
+}
+#notes-list details {
+  cursor: pointer;
+  margin: 0;
+}
+#notes-list summary {
+  list-style: none;
+  padding: 0.2rem 0.5rem;
+  font-weight: bold;
+}
+#notes-list summary::before { content: "▸ "; }
+#notes-list details[open] > summary::before { content: "▾ "; }

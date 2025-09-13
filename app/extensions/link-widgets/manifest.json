@@ -1,0 +1,5 @@
+{
+  "name": "Link Widgets",
+  "main": "./main.js",
+  "style": "./style.css"
+}

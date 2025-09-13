@@ -1,0 +1,4 @@
+{
+  "name": "Status bar",
+  "main": "./main.js"
+}

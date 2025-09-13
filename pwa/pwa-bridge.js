@@ -2,6 +2,54 @@ let directoryHandle;
 let fileHandles = new Map();
 let initialFilesRequest = null;
 
+const idbStore = {
+  db: null,
+  async getDb() {
+    if (this.db) return this.db;
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('olivine-db', 1);
+      request.onupgradeneeded = () => {
+        request.result.createObjectStore('keyval');
+      };
+      request.onsuccess = () => {
+        this.db = request.result;
+        resolve(this.db);
+      };
+      request.onerror = (e) => reject(e);
+    });
+  },
+  async get(key) {
+    const db = await this.getDb();
+    return new Promise((resolve) => {
+      const tx = db.transaction('keyval', 'readonly');
+      const store = tx.objectStore('keyval');
+      const req = store.get(key);
+      req.onsuccess = () => resolve(req.result);
+    });
+  },
+  async set(key, value) {
+    const db = await this.getDb();
+    const tx = db.transaction('keyval', 'readwrite');
+    const store = tx.objectStore('keyval');
+    store.put(value, key);
+    return tx.done;
+  }
+};
+
+async function verifyPermission(handle) {
+  const options = { mode: 'readwrite' };
+  // Check if permission was already granted
+  if ((await handle.queryPermission(options)) === 'granted') {
+    return true;
+  }
+  // Request permission if it wasn't granted
+  if ((await handle.requestPermission(options)) === 'granted') {
+    return true;
+  }
+  // Permission not granted
+  return false;
+}
+
 // 1. Mock the VS Code API
 const vscode = {
   postMessage: (message) => {
@@ -45,31 +93,45 @@ async function getFilesRecursively(dirHandle, path = "") {
 // 3. Updated File System Access Logic
 async function openVault() {
   if (!initialFilesRequest) {
-    console.warn(
-      "Open Vault clicked, but the app hasn't requested the file list yet.",
-    );
+    console.warn("Vault request not ready.");
     return;
   }
-
   try {
-    directoryHandle = await window.showDirectoryPicker();
-    fileHandles.clear();
+    const handle = await window.showDirectoryPicker();
+    directoryHandle = handle;
+    
+    // Save the handle to IndexedDB for next time
+    await idbStore.set('directoryHandle', handle);
 
-    // Use the new recursive function
-    const files = await getFilesRecursively(directoryHandle);
-
-    // Dispatch the response the app is waiting for
-    window.dispatchEvent(
-      new MessageEvent("message", {
-        data: {
-          requestId: initialFilesRequest.requestId,
-          payload: files,
-        },
-      }),
-    );
-    initialFilesRequest = null;
+    await loadFilesFromHandle(handle);
   } catch (e) {
     console.error("Error opening vault:", e);
+  }
+}
+
+async function loadFilesFromHandle(handle) {
+  fileHandles.clear();
+  const files = await getFilesRecursively(handle);
+  window.dispatchEvent(new MessageEvent("message", {
+    data: {
+      requestId: initialFilesRequest.requestId,
+      payload: files,
+    },
+  }));
+  initialFilesRequest = null;
+}
+
+async function loadInitialVault() {
+  const handle = await idbStore.get('directoryHandle');
+
+  if (handle && initialFilesRequest) {
+    if (await verifyPermission(handle)) {
+      console.log("Restoring vault access from saved handle.");
+      directoryHandle = handle;
+      await loadFilesFromHandle(handle);
+    } else {
+      console.log("Saved handle found, but permission was denied.");
+    }
   }
 }
 
@@ -120,7 +182,16 @@ async function saveFile(filePath, content) {
 
 // 4. Hook up the UI button
 window.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("open-vault-btn")
-    .addEventListener("click", openVault);
+  document.getElementById("open-vault-btn").addEventListener("click", openVault);
+
+  // We need to wait for the app to be ready to receive files
+  const originalPostMessage = vscode.postMessage;
+  vscode.postMessage = (message) => {
+    if (message.type === 'getInitialFiles') {
+      initialFilesRequest = { requestId: message.requestId };
+      // Now that the app is ready, try to load the saved vault
+      loadInitialVault();
+    }
+    originalPostMessage(message);
+  };
 });

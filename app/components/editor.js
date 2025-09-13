@@ -24,58 +24,13 @@ function onUpdate(pane) {
         const content = update.state.doc.toString();
         if (pane.filePath) {
           saveFile(pane.filePath, content);
+          // NEW: Emit the event after saving
+          window.app.events.emit("file:saved", { path: pane.filePath });
         }
       }, 500);
     }
   });
 }
-
-// ### FIX STARTS HERE ###
-// This plugin was missing. It finds "Link" nodes in the syntax tree
-// and applies a CSS class to them, making them visually distinct.
-const livePreviewPlugin = EditorView.decorations.compute(["doc"], (state) => {
-  let decorations = [];
-  syntaxTree(state).iterate({
-    enter: (node) => {
-      const { type, from, to } = node;
-
-      switch (type.name) {
-        case "Link":
-          decorations.push(
-            Decoration.mark({ class: "cm-wikilink" }).range(from, to),
-          );
-          break;
-        case "HeaderMark":
-        case "QuoteMark":
-        case "ListMark":
-          // Apply a class to syntax characters so they can be hidden by CSS
-          decorations.push(
-            Decoration.mark({ class: "cm-formatting" }).range(from, to),
-          );
-          break;
-        case "ATXHeading1":
-          decorations.push(
-            Decoration.line({ class: "cm-header-1" }).range(from),
-          );
-          break;
-        case "ATXHeading2":
-          decorations.push(
-            Decoration.line({ class: "cm-header-2" }).range(from),
-          );
-          break;
-        case "ATXHeading3":
-          decorations.push(
-            Decoration.line({ class: "cm-header-3" }).range(from),
-          );
-          break;
-        case "Blockquote":
-          decorations.push(Decoration.line({ class: "cm-quote" }).range(from));
-          break;
-      }
-    },
-  });
-  return Decoration.set(decorations);
-});
 
 // This is the click handler for wikilinks. It was present but couldn't
 // work without the styled links from the plugin above.
@@ -140,10 +95,8 @@ export function createEditor(parent, doc = "") {
       oneDark,
       EditorView.lineWrapping,
       onUpdate(pane),
-      livePreviewPlugin, // Activate the restored plugin
-      wikilinkClickHandler,
-      autocompletion({ override: [wikilinkCompletion] }),
       keymap.of([...defaultKeymap, ...completionKeymap]),
+      ...state.cmExtensions,
     ],
   });
 

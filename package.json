@@ -1,59 +1,59 @@
 {
-  "name": "silex-vscode",
-  "displayName": "Silex for VSCode",
+  "name": "olivine-vscode",
+  "displayName": "Olivine for VSCode",
   "description": "An Obsidian-like vault reader for VS Code.",
   "version": "0.0.1",
   "publisher": "rberenguel",
-  "repository": "https://github.com/rberenguel/silex",
+  "repository": "https://github.com/rberenguel/olivine",
   "engines": {
     "vscode": "^1.85.0"
   },
   "license": "MIT",
   "main": "./extension.js",
   "activationEvents": [
-    "onCommand:silex.openVault",
-    "onView:silexSidebarView"
+    "onCommand:olivine.openVault",
+    "onView:olivineSidebarView"
   ],
   "contributes": {
     "commands": [
       {
-        "command": "silex.openVault",
-        "title": "Silex: Open Vault"
+        "command": "olivine.openVault",
+        "title": "Olivine: Open Vault"
       },
       {
-        "command": "silex.splitVertical",
-        "title": "Silex: Split Vertically"
+        "command": "olivine.splitVertical",
+        "title": "Olivine: Split Vertically"
       },
       {
-        "command": "silex.splitHorizontal",
-        "title": "Silex: Split Horizontally"
+        "command": "olivine.splitHorizontal",
+        "title": "Olivine: Split Horizontally"
       }
     ],
     "keybindings": [
       {
-        "command": "silex.splitVertical",
+        "command": "olivine.splitVertical",
         "key": "ctrl+p |",
-        "when": "webviewPanel.active && webviewPanel.viewType == 'silex'"
+        "when": "webviewPanel.active && webviewPanel.viewType == 'olivine'"
       },
       {
-        "command": "silex.splitHorizontal",
+        "command": "olivine.splitHorizontal",
         "key": "ctrl+p -",
-        "when": "webviewPanel.active && webviewPanel.viewType == 'silex'"
+        "when": "webviewPanel.active && webviewPanel.viewType == 'olivine'"
       }
     ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "silex-sidebar",
-          "title": "Silex",
+          "id": "olivine-sidebar",
+          "title": "Olivine",
           "icon": "icon.png"
         }
       ]
     },
     "views": {
-      "silex-sidebar": [
+      "olivine-sidebar": [
         {
-          "id": "silexSidebarView",
+          "id": "olivineSidebarView",
           "name": "Vault Explorer"
         }
       ]
